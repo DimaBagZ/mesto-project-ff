@@ -23,9 +23,9 @@ const jobProfileInput = editProfileForm.querySelector(".popup__input_type_descri
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
-const popupEditProfile = popupNewCard.querySelector(".popup__form");
-const nameInput = popupEditProfile.querySelector(".popup__input_type_card-name");
-const linkInput = popupEditProfile.querySelector(".popup__input_type_url");
+const popupEditFormCard = popupNewCard.querySelector(".popup__form");
+const nameInput = popupEditFormCard.querySelector(".popup__input_type_card-name");
+const linkInput = popupEditFormCard.querySelector(".popup__input_type_url");
 
 
 
@@ -61,14 +61,14 @@ function handleEditForm(evt) {
 
 editProfileForm.addEventListener("submit", handleEditForm);
 
-popupEditProfile.addEventListener("submit", (evt) => {
+popupEditFormCard.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const nameValue = nameInput.value;
   const linkValue = linkInput.value;
   const newCard = createCard(nameValue, linkValue, deleteCard, openFullScreen, likeCard);
 
   placesList.prepend(newCard);
-  popupEditProfile.reset();
+  popupEditFormCard.reset();
   closeModal(popupNewCard);
 });
 
