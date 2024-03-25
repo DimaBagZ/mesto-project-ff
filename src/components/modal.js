@@ -1,14 +1,14 @@
-function closePressEscapeModal(popup) {
-    if (popup.key === "Escape") {
+function closePressEscapeModal(evt) {
+    if (evt.key === "Escape") {
       closeModal(document.querySelector(".popup_is-opened"));
     }
   }
   
   function closeOverlay(event) {
-    if (event.target.classList.contains("popup_is-opened")) {
-      closeModal(event.target);
+    if (event.target.classList.contains("popup_is-opened") || event.target.classList.contains('popup__close')) {
+        closeModal(event.currentTarget)
     }
-    if (event.target.closest(".popup__close")) {
+    if (event.target.classList.contains('popup__close')) {
       closeModal(event.target.closest(".popup"));
     }
   }

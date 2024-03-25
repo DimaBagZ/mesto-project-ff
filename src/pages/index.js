@@ -17,9 +17,9 @@ const popupCaption = document.querySelector(".popup__caption");
 const popupCloseProfile = popupProfile.querySelector(".popup__close");
 const popupCloseNewCard = popupNewCard.querySelector(".popup__close");
 
-const formElement = document.forms["edit-profile"];
-const nameProfileInput = formElement.querySelector(".popup__input_type_name");
-const jobProfileInput = formElement.querySelector(".popup__input_type_description");
+const editProfileForm = document.forms["edit-profile"];
+const nameProfileInput = editProfileForm.querySelector(".popup__input_type_name");
+const jobProfileInput = editProfileForm.querySelector(".popup__input_type_description");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
@@ -38,14 +38,14 @@ function openFullScreen(name, link) {
 
 profileEditButton.addEventListener("click", () => {
   openModal(popupProfile);
-  saveInputs();
+  fillPopupEditInputs();
 });
 
 
 popupCloseProfile.addEventListener("click", () => 
   closeModal(popupProfile));
 
-function saveInputs() {
+function fillPopupEditInputs() {
   nameProfileInput.value = profileName.textContent;
   jobProfileInput.value = profileDescription.textContent;
 }
@@ -59,7 +59,7 @@ function handleEditForm(evt) {
   closeModal(popupProfile);
 }
 
-formElement.addEventListener("submit", handleEditForm);
+editProfileForm.addEventListener("submit", handleEditForm);
 
 popupForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
