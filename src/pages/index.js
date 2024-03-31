@@ -131,7 +131,7 @@ function handleEditFormSubmit(evt) {
 }
 
 // Редактор аватара пользователя
-function handleProfileAvatar(evt) {
+function handleProfileAvatarSubmit(evt) {
   evt.preventDefault();
   const linkValue = profileLinkInput.value;
   showLoading(true, profileSaveButton);
@@ -153,7 +153,7 @@ function handleProfileAvatar(evt) {
 }
 
 // Едит карточек на страницу
-function handleAddCard(evt) {
+function handleAddCardSubmit(evt) {
   evt.preventDefault();
   const nameValue = nameInput.value;
   const linkValue = linkInput.value;
@@ -200,10 +200,10 @@ closeProfileButton.addEventListener("click", () => {
 
 popupCloseProfile.addEventListener("click", () => closeModal(popupProfile));
 
-profileFormAvatar.addEventListener("submit", handleProfileAvatar);
+profileFormAvatar.addEventListener("submit", handleProfileAvatarSubmit);
 editProfileForm.addEventListener("submit", handleEditFormSubmit);
 
-popupEditFormCard.addEventListener("submit", handleAddCard);
+popupEditFormCard.addEventListener("submit", handleAddCardSubmit);
 
 profileAddButton.addEventListener("click", () => openModal(popupNewCard));
 
