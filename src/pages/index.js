@@ -200,7 +200,7 @@ closeProfileButton.addEventListener("click", () => {
 
 popupCloseProfile.addEventListener("click", () => closeModal(popupProfile));
 
-//Слушатель сабмита формы редактирования профиля
+///Слушатель сабмита обновления аватара
 profileFormAvatar.addEventListener("submit", handleProfileAvatarSubmit);
 
 //Слушатель сабмита формы редактирования профиля
