@@ -200,9 +200,13 @@ closeProfileButton.addEventListener("click", () => {
 
 popupCloseProfile.addEventListener("click", () => closeModal(popupProfile));
 
+//Слушатель сабмита формы редактирования профиля
 profileFormAvatar.addEventListener("submit", handleProfileAvatarSubmit);
+
+//Слушатель сабмита формы редактирования профиля
 editProfileForm.addEventListener("submit", handleEditFormSubmit);
 
+//Слушатель сабмита новой карточки
 popupEditFormCard.addEventListener("submit", handleAddCardSubmit);
 
 profileAddButton.addEventListener("click", () => openModal(popupNewCard));
