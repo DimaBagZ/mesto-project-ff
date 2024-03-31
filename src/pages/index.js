@@ -171,13 +171,13 @@ function handleAddCard(evt) {
       );
       cardsContainer.prepend(newCard);
       closeModal(popupNewCard);
+      popupEditFormCard.reset();
     })
     .catch((error) => {
       console.log(error);
       enebleSubmitButton(profileSaveButton);
     })
     .finally(() => {
-      popupEditFormCard.reset();
       showLoading(false, popupEditFormCard.querySelector(".popup__button"));
     });
 }
