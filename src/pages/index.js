@@ -1,20 +1,25 @@
 import "./index.css";
 
-import { closeOverlay, openModal, closeModal} from "../components/modal.js";
+import { handleCloseByClick, openModal, closeModal } from "../components/modal.js";
 import { createCard, likeCard, deleteCard } from "../components/card.js";
-import { enableValidation, clearValidation } from "../components/validation.js";
+import {
+  enableValidation,
+  clearValidation,
+  disableSubmitButton,
+  enebleSubmitButton,
+} from "../components/validation.js";
 
 import {
   getUser,
   getInitCards,
-  getInitProfile,
+  getInitialData,
   editProfileInfo,
   postNewCard,
   patchUserAvatar,
 } from "../components/api.js";
 
 const cardTemplate = document.querySelector("#card-template").content;
-const placesList = document.querySelector(".places__list");
+const cardsContainer = document.querySelector(".places__list");
 
 const popupProfile = document.querySelector(".popup_type_edit");
 const popupNewCard = document.querySelector(".popup_type_new-card");
@@ -74,28 +79,20 @@ function addCard(
     likeCard,
     userId
   );
-  placesList.append(cardElement);
-}
-
-// Заполняем контентом карточку
-function fillCards(initialCards, userId) {
-  initialCards.forEach((card) => {
-    addCard(
-      card,
-      createCard,
-      cardTemplate,
-      deleteCard,
-      openFullScreen,
-      likeCard,
-      userId
-    );
-  });
+  cardsContainer.append(cardElement);
 }
 
 // Отображаем загрузку данных, пока идет отправка
 const showLoading = (isLoading, button) => {
   button.textContent = isLoading ? "Сохранение..." : "Сохранить";
 };
+
+// Заполняем контентом карточку
+function renderCards(cards, userId) {
+  cards.forEach((card) => {
+    addCard(card, createCard, cardTemplate, deleteCard, openFullScreen, likeCard, userId);
+  });
+}
 
 // Открытие карточки на весь экран
 function openFullScreen(card) {
@@ -105,15 +102,6 @@ function openFullScreen(card) {
   openModal(popupTypeImage);
 }
 
-profileEditButton.addEventListener("click", () => {
-  openModal(popupProfile);
-  fillPopupEditInputs();
-  clearValidation(editProfileForm, validationConfig);
-});
-
-popupCloseProfile.addEventListener("click", () => 
-  closeModal(popupProfile));
-
 // Сохраняем поля данных о Юзере и его деятельности
 function fillPopupEditInputs() {
   nameProfileInput.value = profileName.textContent;
@@ -121,12 +109,12 @@ function fillPopupEditInputs() {
 }
 
 // Редактор профиля пользователя
-function handleEditForm(evt) {
+function handleEditFormSubmit(evt) {
   evt.preventDefault();
   const nameInputValue = nameProfileInput.value;
   const jobInputValue = jobProfileInput.value;
-  showLoading(true, popupProfile.querySelector(".popup__button"));
-  editSaveButton.disabled = true;
+  showLoading(true, editSaveButton);
+  disableSubmitButton(editSaveButton);
   editProfileInfo(nameInputValue, jobInputValue)
     .then((res) => {
       profileName.textContent = res.name;
@@ -135,11 +123,70 @@ function handleEditForm(evt) {
     })
     .catch((error) => {
       console.log(error);
+      enebleSubmitButton(editSaveButton);
     })
     .finally(() => {
-      showLoading(false, popupProfile.querySelector(".popup__button"));
+      showLoading(false, editSaveButton);
     });
 }
+
+// Редактор аватара пользователя
+function handleProfileAvatar(evt) {
+  evt.preventDefault();
+  const linkValue = profileLinkInput.value;
+  showLoading(true, profileSaveButton);
+  disableSubmitButton(profileSaveButton);
+  patchUserAvatar(linkValue)
+    .then((res) => {
+      profileImage.style.backgroundImage = linkValue;
+      profileImage.style.backgroundImage = `url('${res.avatar}')`;
+      closeModal(profilePopupAvatar);
+      profileFormAvatar.reset();
+    })
+    .catch((error) => {
+      console.log(error);
+      enebleSubmitButton(profileSaveButton);
+    })
+    .finally(() => {
+      showLoading(false, profileFormAvatar.querySelector(".popup__button"));
+    });
+}
+
+// Едит карточек на страницу
+function handleAddCard(evt) {
+  evt.preventDefault();
+  const nameValue = nameInput.value;
+  const linkValue = linkInput.value;
+  showLoading(true, popupEditFormCard.querySelector(".popup__button"));
+  disableSubmitButton(profileSaveButton);
+  postNewCard(nameValue, linkValue)
+    .then((card) => {
+      const newCard = createCard(
+        card,
+        cardTemplate,
+        deleteCard,
+        openFullScreen,
+        likeCard,
+        userId
+      );
+      cardsContainer.prepend(newCard);
+      closeModal(popupNewCard);
+    })
+    .catch((error) => {
+      console.log(error);
+      enebleSubmitButton(profileSaveButton);
+    })
+    .finally(() => {
+      popupEditFormCard.reset();
+      showLoading(false, popupEditFormCard.querySelector(".popup__button"));
+    });
+}
+
+profileEditButton.addEventListener("click", () => {
+  openModal(popupProfile);
+  fillPopupEditInputs();
+  clearValidation(editProfileForm, validationConfig);
+});
 
 profileImageButton.addEventListener("click", () => {
   openModal(profilePopupAvatar);
@@ -151,85 +198,32 @@ closeProfileButton.addEventListener("click", () => {
   closeModal(profilePopupAvatar);
 });
 
-// Редактор аватара пользователя
-function handleProfileAvatar(evt) {
-  evt.preventDefault();
-  const linkValue = profileLinkInput.value;
-  profileImage.style.backgroundImage = linkValue;
-  showLoading(true, profilePopupAvatar.querySelector(".popup__button"));
-  profileSaveButton.disabled = true;
-  patchUserAvatar(linkValue)
-    .then((res) => {
-      profileImage.style.backgroundImage = `url('${res.avatar}')`;
-      closeModal(profilePopupAvatar);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      profileFormAvatar.reset();
-      showLoading(false, profileFormAvatar.querySelector(".popup__button"));
-    });
-}
+popupCloseProfile.addEventListener("click", () => closeModal(popupProfile));
 
 profileFormAvatar.addEventListener("submit", handleProfileAvatar);
-
-editProfileForm.addEventListener("submit", handleEditForm);
-
-// Едит карточек на страницу
-function handleAddCard(evt) {
-  evt.preventDefault();
-  const nameValue = nameInput.value;
-  const linkValue = linkInput.value;
-  showLoading(true, popupEditFormCard.querySelector(".popup__button"));
-  profileSaveButton.disabled = true;
-  postNewCard(nameValue, linkValue)
-    .then((card) => {
-      const newCard = createCard(
-        card,
-        cardTemplate,
-        deleteCard,
-        openFullScreen,
-        likeCard,
-        userId
-      );
-      placesList.prepend(newCard);
-      closeModal(popupNewCard);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      popupEditFormCard.reset();
-      showLoading(false, popupEditFormCard.querySelector(".popup__button"));
-    });
-}
+editProfileForm.addEventListener("submit", handleEditFormSubmit);
 
 popupEditFormCard.addEventListener("submit", handleAddCard);
 
-profileAddButton.addEventListener("click",  () => 
- openModal(popupNewCard));
+profileAddButton.addEventListener("click", () => openModal(popupNewCard));
 
-popupCloseNewCard.addEventListener("click", () => 
- closeModal(popupNewCard));
+popupCloseNewCard.addEventListener("click", () => closeModal(popupNewCard));
 
-popupTypeImage.addEventListener("click", closeOverlay);
-popupNewCard.addEventListener("click", closeOverlay);
+popupTypeImage.addEventListener("click", handleCloseByClick);
+popupNewCard.addEventListener("click", handleCloseByClick);
 
-popupProfile.addEventListener("click", closeOverlay);
-profilePopupAvatar.addEventListener("click", closeOverlay);
+popupProfile.addEventListener("click", handleCloseByClick);
+profilePopupAvatar.addEventListener("click", handleCloseByClick);
 
 let userId;
 
-getInitProfile();
-Promise.all([getUser(), getInitCards()])
-  .then((array) => {
-    const [userList, initialCards] = array;
+getInitialData([getUser(), getInitCards()])
+  .then(([userList, cards]) => {
     profileName.textContent = userList.name;
     profileDescription.textContent = userList.about;
     userId = userList._id;
     profileImage.style.backgroundImage = `url(${userList.avatar})`;
-    fillCards(initialCards, userId);
+    renderCards(cards, userId);
   })
   .catch((error) => {
     console.log(error);

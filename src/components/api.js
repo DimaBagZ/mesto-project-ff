@@ -34,16 +34,16 @@ const getInitCards = async () => {
 };
 
 //Возвращаем значения промисов Юзера и Карточек
-const getInitProfile = () => {
+const getInitialData = () => {
   return Promise.all([getUser(), getInitCards()]);
 };
 
-// Функция запроса обновления данных на сервере о профиле 
+// Функция запроса обновления данных на сервере о профиле
 const editProfileInfo = async (name, description) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
-    body: JSON.stringify({name, about: description,}),
+    body: JSON.stringify({ name, about: description }),
   }).then((res) => getDataResponse(res));
 };
 
@@ -52,7 +52,7 @@ const postNewCard = async (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
-    body: JSON.stringify({name, link,}),
+    body: JSON.stringify({ name, link }),
   }).then((res) => getDataResponse(res));
 };
 
@@ -84,7 +84,7 @@ const patchUserAvatar = async (url) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
-    body: JSON.stringify({avatar: url,}),
+    body: JSON.stringify({ avatar: url }),
   }).then((res) => getDataResponse(res));
 };
 
@@ -92,11 +92,11 @@ export {
   getDataResponse,
   getUser,
   getInitCards,
-  getInitProfile,
+  getInitialData,
   editProfileInfo,
   postNewCard,
   deleteCardRequest,
   putLikeCardRequest,
   deleteLikeCardRequest,
-  patchUserAvatar
+  patchUserAvatar,
 };
