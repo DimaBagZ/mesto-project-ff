@@ -6,7 +6,7 @@ import {
   enableValidation,
   clearValidation,
   disableSubmitButton,
-  enebleSubmitButton,
+  enableSubmitButton,
 } from "../components/validation.js";
 
 import {
@@ -44,6 +44,7 @@ const profileDescription = document.querySelector(".profile__description");
 const popupEditFormCard = popupNewCard.querySelector(".popup__form");
 const nameInput = popupEditFormCard.querySelector(".popup__input_type_card-name");
 const linkInput = popupEditFormCard.querySelector(".popup__input_type_url");
+const cardFormSubmitButton = popupEditFormCard.querySelector(".popup__button");
 
 const profileImageButton = document.querySelector(".profile__image-cover");
 const profileImage = document.querySelector(".profile__image");
@@ -51,7 +52,7 @@ const profilePopupAvatar = document.querySelector(".popup_type_avatar");
 const closeProfileButton = profilePopupAvatar.querySelector(".popup__close");
 const profileFormAvatar = document.forms["avatar_edit"];
 const profileLinkInput = profileFormAvatar.querySelector(".popup__input_type_url");
-const profileSaveButton = profilePopupAvatar.querySelector(".popup__button");
+const avatarFormSubmitButton = profilePopupAvatar.querySelector(".popup__button");
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -114,7 +115,7 @@ function handleEditFormSubmit(evt) {
   const nameInputValue = nameProfileInput.value;
   const jobInputValue = jobProfileInput.value;
   showLoading(true, editSaveButton);
-  disableSubmitButton(editSaveButton);
+  disableSubmitButton(editSaveButton, validationConfig.inactiveButtonClass);
   editProfileInfo(nameInputValue, jobInputValue)
     .then((res) => {
       profileName.textContent = res.name;
@@ -123,7 +124,7 @@ function handleEditFormSubmit(evt) {
     })
     .catch((error) => {
       console.log(error);
-      enebleSubmitButton(editSaveButton);
+      enableSubmitButton(editSaveButton, validationConfig.inactiveButtonClass);
     })
     .finally(() => {
       showLoading(false, editSaveButton);
@@ -134,8 +135,8 @@ function handleEditFormSubmit(evt) {
 function handleProfileAvatarSubmit(evt) {
   evt.preventDefault();
   const linkValue = profileLinkInput.value;
-  showLoading(true, profileSaveButton);
-  disableSubmitButton(profileSaveButton);
+  showLoading(true, avatarFormSubmitButton);
+  disableSubmitButton(avatarFormSubmitButton, validationConfig.inactiveButtonClass);
   patchUserAvatar(linkValue)
     .then((res) => {
       profileImage.style.backgroundImage = linkValue;
@@ -145,10 +146,10 @@ function handleProfileAvatarSubmit(evt) {
     })
     .catch((error) => {
       console.log(error);
-      enebleSubmitButton(profileSaveButton);
+      enableSubmitButton(avatarFormSubmitButton, validationConfig.inactiveButtonClass);
     })
     .finally(() => {
-      showLoading(false, profileFormAvatar.querySelector(".popup__button"));
+      showLoading(false, avatarFormSubmitButton);
     });
 }
 
@@ -157,8 +158,8 @@ function handleAddCardSubmit(evt) {
   evt.preventDefault();
   const nameValue = nameInput.value;
   const linkValue = linkInput.value;
-  showLoading(true, popupEditFormCard.querySelector(".popup__button"));
-  disableSubmitButton(profileSaveButton);
+  showLoading(true, cardFormSubmitButton);
+  disableSubmitButton(cardFormSubmitButton, validationConfig.inactiveButtonClass);
   postNewCard(nameValue, linkValue)
     .then((card) => {
       const newCard = createCard(
@@ -172,13 +173,14 @@ function handleAddCardSubmit(evt) {
       cardsContainer.prepend(newCard);
       closeModal(popupNewCard);
       popupEditFormCard.reset();
+      clearValidation(popupEditFormCard, validationConfig);
     })
     .catch((error) => {
       console.log(error);
-      enebleSubmitButton(profileSaveButton);
+      enableSubmitButton(cardFormSubmitButton, validationConfig.inactiveButtonClass);
     })
     .finally(() => {
-      showLoading(false, popupEditFormCard.querySelector(".popup__button"));
+      showLoading(false, cardFormSubmitButton);
     });
 }
 
