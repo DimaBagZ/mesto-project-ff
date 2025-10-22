@@ -98,7 +98,7 @@ npm run deploy
 
 **Система модальных окон**
 
-- Реализованы модальные окна для редактирования профиля
+- Реализованы модальные окна для редактирования профиля и аватара
 - Добавлено модальное окно создания новых карточек
 - Создан просмотр изображений в полноэкранном режиме
 - Добавлены плавные анимации открытия/закрытия
@@ -121,22 +121,26 @@ npm run deploy
 
 ### Главная страница
 
-![Главная страница](screenshots/main-page.png)
+<img width="1900" height="920" alt="image" src="https://github.com/user-attachments/assets/2043d31c-a8b6-4e7c-a736-988e3a618992" />
+
 _Интерфейс с профилем пользователя и галереей карточек_
 
 ### Редактирование профиля
 
-![Редактирование профиля](screenshots/edit-profile.png)
+<img width="1895" height="914" alt="image" src="https://github.com/user-attachments/assets/92952c72-24cb-4d7b-8828-ebb846256c7b" />
+
 _Модальное окно для изменения данных пользователя_
 
 ### Добавление карточки
 
-![Добавление карточки](screenshots/add-card.png)
+<img width="1895" height="916" alt="image" src="https://github.com/user-attachments/assets/dd11f980-36bd-429f-b6a6-deb4413b1db1" />
+
 _Форма для создания новой карточки с валидацией_
 
 ### Просмотр изображения
 
-![Просмотр изображения](screenshots/image-view.png)
+<img width="1898" height="918" alt="image" src="https://github.com/user-attachments/assets/90e67057-2ec7-4f8b-88d6-19349238423f" />
+
 _Полноэкранный просмотр изображения с подписью_
 
 ## Особенности
